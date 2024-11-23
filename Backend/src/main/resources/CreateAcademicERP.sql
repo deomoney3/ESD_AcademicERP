@@ -7,3 +7,7 @@ create table employee(
     title varchar(50) not null ,
     department varchar(50) not null
 )
+
+create table courseSpecialization(
+
+)

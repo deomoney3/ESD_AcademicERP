@@ -30,7 +30,7 @@ public class EmployeeService {
 
     public String login(LoginRequest request) {
         Employee employee = repo.findByEmail(request.email());
-        if(!encryptionService.validates(request.password(), employee.getPassword())) {
+        if(!(request.password().equals(employee.getPassword()) && employee.getDepartment().equals("Admin"))) {
             return "Wrong Password or Email";
         }
 
