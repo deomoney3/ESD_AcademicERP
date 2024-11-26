@@ -5,18 +5,19 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public record CourseRequest(
-        @NotNull(message = "course_id should be present")
-        @NotEmpty(message = "course_id should be present")
-        @NotBlank(message = "course_id should be present")
-        @JsonProperty("course_id")
-        String course_id,
+public record SpecializationRequest(
+
+        @NotNull(message = "specialization_id should be present")
+        @NotEmpty(message = "specialization_id should be present")
+        @NotBlank(message = "specialization_id should be present")
+        @JsonProperty("specialization_id")
+        String specialization_id,
 
         @NotNull(message = "course_code should be present")
         @NotEmpty(message = "course_code should be present")
         @NotBlank(message = "course_code should be present")
-        @JsonProperty("course_code")
-        String course_code,
+        @JsonProperty("code")
+        String code,
 
         @NotNull(message = "name should be present")
         @NotEmpty(message = "name should be present")
@@ -36,29 +37,11 @@ public record CourseRequest(
         @JsonProperty("year")
         String year,
 
-        @NotNull(message = "term should be present")
-        @NotEmpty(message = "term should be present")
-        @NotBlank(message = "term should be present")
-        @JsonProperty("term")
-        String term,
-
-        @NotNull(message = "faculty should be present")
-        @NotEmpty(message = "faculty should be present")
-        @NotBlank(message = "faculty should be present")
-        @JsonProperty("faculty")
-        String faculty,
-
         @NotNull(message = "credits should be present")
         @NotEmpty(message = "credits should be present")
         @NotBlank(message = "credits should be present")
-        @JsonProperty("credits")
-        String credits,
-
-        @NotNull(message = "capacity should be present")
-        @NotEmpty(message = "capacity should be present")
-        @NotBlank(message = "capacity should be present")
-        @JsonProperty("capacity")
-        String capacity
-
+        @JsonProperty("credits_required")
+        String credits_required
 ) {
+
 }

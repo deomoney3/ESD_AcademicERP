@@ -19,15 +19,4 @@ public class EmployeeMapper {
                 .build();
     }
 
-    public EmployeeResponse toCustomerResponse(Employee employee) {
-
-        return new EmployeeResponse(
-                employee.getEmployee_id(),
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getTitle(),
-                employee.getDepartment()
-        );
-    }
 }
