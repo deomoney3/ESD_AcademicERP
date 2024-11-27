@@ -87,7 +87,7 @@ public class SpecializationController {
         }
     }
 
-    @PostMapping( "/Courses")
+    @PostMapping( "/courses")
     public ResponseEntity<String> AddCourseInSpecialization(@RequestHeader("Authorization") String token, @RequestBody @Valid SpecializationCourseRequest request) {
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);

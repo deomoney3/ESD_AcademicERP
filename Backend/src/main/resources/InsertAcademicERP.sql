@@ -23,19 +23,3 @@ insert into courses values
                 ('DSAI04','CV','Computer Vision','Study of image processing, feature extraction, and object detection','2024','Fall','Ramesh Iyer','4','110'),
                 ('DSAI05','BigData','Big Data Analytics','Handling large datasets with Hadoop and Spark','2024','Spring','Arun Joshi','4','150');
 
-insert into specialization_course values
-                                      ('1','S01','CSE01'),
-                                      ('2','S01','CSE02'),
-                                      ('3','S01','CSE03'),
-                                      ('4','S01','CSE04'),
-                                      ('5','S01','CSE05'),
-                                      ('6','S02','ECE01'),
-                                      ('7','S02','ECE02'),
-                                      ('8','S02','ECE03'),
-                                      ('9','S02','ECE04'),
-                                      ('10','S02','ECE05'),
-                                      ('11','S03','DSAI01'),
-                                      ('12','S03','DSAI02'),
-                                      ('13','S03','DSAI03'),
-                                      ('14','S03','DSAI04'),
-                                      ('15','S03','DSAI05');

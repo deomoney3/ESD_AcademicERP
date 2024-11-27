@@ -20,6 +20,6 @@ public class SpecializationCourse {
     @JoinColumn(name ="specialization_id",nullable = false)
     private String specialization_id;
 
-    @Column(name ="course_id",nullable = false)
+    @JoinColumn(name ="course_id",nullable = false)
     private String course_id;
 }

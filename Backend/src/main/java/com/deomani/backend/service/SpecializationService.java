@@ -14,6 +14,7 @@ import com.deomani.backend.repo.SpecializationRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import com.deomani.backend.mapper.CourseMapper;
 
@@ -60,13 +61,16 @@ public class SpecializationService {
     }
 
     public String createCourse(SpecializationCourseRequest request) {
-        SpecializationCourse specialization = new SpecializationCourse();
-        Courses courses = new Courses();
-        if(!(specialization.getSpecialization_id().equals(request.specialization_id()) && courses.getCourse_id().equals(request.course_id()))){
-            return "Invalid Course";
+        Optional<Specialization> specialization = specializationRepo.findById(request.specialization_id());
+        if(!specialization.isPresent()) {
+            return "Specialization Not Found";
         }
-        specialization = specializationCourseMapper.toEntity(request);
-        specializationCourseRepo.save(specialization);
+        Optional<Courses> courses = coursesRepo.findById(request.course_id());
+        if(!courses.isPresent()) {
+            return "Course Not Found";
+        }
+        SpecializationCourse specializationCourse = specializationCourseMapper.toEntity(request);
+        specializationCourseRepo.save(specializationCourse);
 
         return "Course Created Successfully";
     }
