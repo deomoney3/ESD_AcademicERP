@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "course_specialization")
+@Table(name = "specialization")
 public class Specialization {
     @Id
     @Column(name ="specialization_id")

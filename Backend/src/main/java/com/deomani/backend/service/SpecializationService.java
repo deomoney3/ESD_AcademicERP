@@ -1,23 +1,35 @@
 package com.deomani.backend.service;
-import com.deomani.backend.dto.SpecializationRequest;
-import com.deomani.backend.dto.SpecializationResponse;
+import com.deomani.backend.dto.*;
+import com.deomani.backend.entity.Courses;
 import com.deomani.backend.entity.Specialization;
+import com.deomani.backend.entity.SpecializationCourse;
+import com.deomani.backend.mapper.SpecializationCourseMapper;
 import com.deomani.backend.mapper.SpecializationMapper;
+import com.deomani.backend.repo.CoursesRepo;
+import com.deomani.backend.repo.SpecializationCourseRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import com.deomani.backend.repo.SpecializationRepo;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import com.deomani.backend.mapper.CourseMapper;
 
 @Service
 @RequiredArgsConstructor
 public class SpecializationService {
-    private final SpecializationRepo repo;
-    private final SpecializationMapper mapper;
     private final SpecializationRepo specializationRepo;
+    private final SpecializationMapper mapper;
+    private final SpecializationCourseRepo specializationCourseRepo;
+    private final CoursesRepo coursesRepo;
+
+    private final SpecializationCourseMapper specializationCourseMapper;
 
     public String createSpecialization(SpecializationRequest request) {
         Specialization specialization = mapper.toEntity(request);
-        repo.save(specialization);
+        specializationRepo.save(specialization);
         return "Specialization Created Successfully";
     }
 
@@ -45,6 +57,54 @@ public class SpecializationService {
 
     public void deleteSpecializationById(String id) {
         specializationRepo.deleteById(id);
+    }
+
+    public String createCourse(SpecializationCourseRequest request) {
+        SpecializationCourse specialization = new SpecializationCourse();
+        Courses courses = new Courses();
+        if(!(specialization.getSpecialization_id().equals(request.specialization_id()) && courses.getCourse_id().equals(request.course_id()))){
+            return "Invalid Course";
+        }
+        specialization = specializationCourseMapper.toEntity(request);
+        specializationCourseRepo.save(specialization);
+
+        return "Course Created Successfully";
+    }
+
+    public SpecializationWithCoursesResponse getSpecializationWithCourses(String specializationId) {
+        // Fetch specialization details
+        Specialization specialization = specializationRepo.findById(specializationId)
+                .orElseThrow(() -> new RuntimeException("Specialization not found with ID: " + specializationId));
+
+        // Fetch all specialization_course mappings for the specialization
+        List<SpecializationCourse> specializationCourses = specializationCourseRepo.findBySpecializationId(specializationId);
+
+//        List<CourseResponse> courses = new ArrayList<>();
+
+//        for(SpecializationCourse sc : specializationCourses){
+//            System.out.println(sc.getCourse_id());
+//            Courses course = coursesRepo.findById(sc.getCourse_id()).get();
+//            System.out.println(course);
+//            courses.add(CourseMapper.toCourseResponse(course));
+//        }
+
+        // Fetch courses based on course IDs
+        List<CourseResponse> courses = specializationCourses.stream()
+                .map(sc -> coursesRepo.findById(sc.getCourse_id())
+                        .map(CourseMapper::toCourseResponse)
+                        .orElseThrow(() -> new RuntimeException("Course not found with ID: " + sc.getCourse_id())))
+                .collect(Collectors.toList());
+
+        // Return combined response
+        return new SpecializationWithCoursesResponse(
+                specialization.getSpecialization_id(),
+                specialization.getCode(),
+                specialization.getName(),
+                specialization.getDescription(),
+                specialization.getYear(),
+                specialization.getCredits_required(),
+                courses
+        );
     }
 
 }

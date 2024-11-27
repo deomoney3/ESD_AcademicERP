@@ -1,9 +1,9 @@
 package com.deomani.backend.controller;
 
-import com.deomani.backend.dto.SpecializationRequest;
-import com.deomani.backend.dto.SpecializationResponse;
+import com.deomani.backend.dto.*;
 import com.deomani.backend.entity.Specialization;
 import com.deomani.backend.helper.JWTHelper;
+import com.deomani.backend.service.SpecializationCourseService;
 import com.deomani.backend.service.SpecializationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ public class SpecializationController {
 
     private final SpecializationService specializationService;
     private final JWTHelper jwtHelper;
+    private final SpecializationCourseService specializationCourseService;
 
     @PostMapping()
     public ResponseEntity<String> createSpecialization(@RequestHeader("Authorization") String token, @RequestBody @Valid SpecializationRequest request) {
@@ -74,6 +75,8 @@ public class SpecializationController {
         validateTokenForEmail(token,email);
 
         specializationService.deleteSpecializationById(id);
+        specializationCourseService.deleteSpecializationById(id);
+
         return ResponseEntity.ok("Specialization deleted successfully");
     }
 
@@ -82,6 +85,32 @@ public class SpecializationController {
         if (!extractedEmail.equals(email)) {
             throw new RuntimeException("Unauthorized: Token does not match provided email");
         }
+    }
+
+    @PostMapping( "/Courses")
+    public ResponseEntity<String> AddCourseInSpecialization(@RequestHeader("Authorization") String token, @RequestBody @Valid SpecializationCourseRequest request) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String email = jwtHelper.extractUsername(token);
+        validateTokenForEmail(token,email);
+
+        return ResponseEntity.ok(specializationService.createCourse(request));
+    }
+
+    @GetMapping("/{id}/courses")
+    public ResponseEntity<SpecializationWithCoursesResponse> getSpecializationWithCourses(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String id) {
+        // (Optional) Token validation logic here
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String email = jwtHelper.extractUsername(token);
+        validateTokenForEmail(token, email);
+
+        // Fetch specialization and associated courses
+        return ResponseEntity.ok(specializationService.getSpecializationWithCourses(id));
     }
 
 }
